@@ -22,7 +22,7 @@ const WritingStudio = () => {
   }, []);
 
   return (
-    <div className="content-container content-container-main lg:flex-[2] h-full">
+    <div className="content-container content-container-main h-full">
       <div className="content-container-header">
         <h1>Writing Studio</h1>
       </div>

@@ -17,7 +17,7 @@ export default function IdeaLab() {
   ]);
 
   return (
-    <div className="content-container content-container-right lg:flex-1 h-full flex flex-col">
+    <div className="content-container content-container-right h-full flex flex-col">
       <div className="content-container-header">
         <h1>Idea Lab</h1>
       </div>

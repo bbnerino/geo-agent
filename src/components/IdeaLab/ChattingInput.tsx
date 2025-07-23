@@ -29,7 +29,7 @@ export default function ChattingInput({
           padding-right: 30px;
           min-height: 60px;
           max-height: 200px;
-          border: 1px solid #e0e0e0;
+          border: 1px solid #8F9298;
           border-radius: 8px;
           resize: none;
           overflow-y: auto;

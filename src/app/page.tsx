@@ -20,18 +20,18 @@ export default function Home() {
         <TabButtons activeTab={activeTab} setActiveTab={setActiveTab} />
       </div>
 
-      {/* 데스크톱 레이아웃 - 1024px 이상에서만 표시 */}
-      <div className="hidden lg:flex flex-col lg:flex-row gap-4 h-full">
-        <KnowledgeHub />
-        <WritingStudio />
-        <IdeaLab />
-      </div>
-
-      {/* 모바일/태블릿 레이아웃 - 1024px 이하에서만 표시 */}
-      <div className="lg:hidden h-full">
-        {activeTab === "knowledge" && <KnowledgeHub />}
-        {activeTab === "writing" && <WritingStudio />}
-        {activeTab === "ideation" && <IdeaLab />}
+      {/* 메인 컨텐츠 영역 */}
+      <div className="flex-1 flex flex-col lg:flex-row gap-4 min-h-0">
+        {/* 데스크톱: 모든 컴포넌트 표시, 모바일: activeTab에 따라 표시 */}
+        <div className={`${activeTab === "knowledge" ? "block" : "hidden"} lg:block lg:w-1/4`}>
+          <KnowledgeHub />
+        </div>
+        <div className={`${activeTab === "writing" ? "block" : "hidden"} lg:block lg:w-2/4`}>
+          <WritingStudio />
+        </div>
+        <div className={`${activeTab === "ideation" ? "block" : "hidden"} lg:block lg:w-1/4`}>
+          <IdeaLab />
+        </div>
       </div>
     </main>
   );

@@ -1,6 +1,6 @@
 const KnowledgeHub = () => {
   return (
-    <div className="content-container content-container-left lg:flex-1">
+    <div className="content-container content-container-left h-full">
       <div className="content-container-header">
         <h1>Knowledge Hub</h1>
       </div>
