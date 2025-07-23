@@ -1,7 +1,7 @@
 "use client";
 
 import Header from "@/components/Header";
-import IdeaLab from "@/components/IdeaLab";
+import IdeaLab from "@/components/IdeaLab/IdeaLab";
 import KnowledgeHub from "@/components/KnowledgeHub";
 import TabButtons from "@/components/TabButton";
 import WritingStudio from "@/components/WritingStudio";

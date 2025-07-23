@@ -5,24 +5,7 @@ import { Editor } from "@toast-ui/react-editor";
 import "@toast-ui/editor/dist/toastui-editor.css";
 
 const WritingStudio = () => {
-  const [content, setContent] = useState(`# 제목 1
-
-이것은 **굵은 글씨**와 *기울임 글씨*를 포함한 일반 텍스트입니다.
-
-## 제목 2
-
-노션 스타일의 인라인 편집기입니다. 제목에 커서를 올리면 편집 모드로 전환됩니다.
-
-- 목록 항목 1
-- 목록 항목 2
-
-### 제목 3
-
-코드 블록도 지원합니다:
-
-\`\`\`
-console.log('Hello World');
-\`\`\``);
+  const [content, setContent] = useState("");
 
   const editorRef = useRef<Editor>(null);
 
@@ -51,6 +34,7 @@ console.log('Hello World');
           initialEditType="markdown"
           useCommandShortcut={true}
           hideModeSwitch={true}
+          placeholder="# 제목을 입력하세요"
           events={{
             change: () => {
               if (editorRef.current) {
