@@ -2,7 +2,7 @@ const KnowledgeHub = () => {
   return (
     <div className="content-container content-container-left lg:flex-1">
       <div className="content-container-header">
-        <h1>출처</h1>
+        <h1>Knowledge Hub</h1>
       </div>
       <div className="p-4">
         <p className="text-[var(--black)]">출처 관련 내용이 여기에 표시됩니다.</p>
