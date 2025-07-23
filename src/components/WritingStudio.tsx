@@ -29,9 +29,9 @@ console.log('Hello World');
   useEffect(() => {
     if (editorRef.current) {
       const editorInstance = editorRef.current.getInstance();
-      
+
       // 에디터의 change 이벤트 리스너 추가
-      editorInstance.on('change', () => {
+      editorInstance.on("change", () => {
         const markdown = editorInstance.getMarkdown();
         setContent(markdown);
       });
@@ -39,29 +39,27 @@ console.log('Hello World');
   }, []);
 
   return (
-    <div className="content-container content-container-main lg:flex-[2]">
+    <div className="content-container content-container-main lg:flex-[2] h-full">
       <div className="content-container-header">
         <h1>Writing Studio</h1>
       </div>
-      <div className="p-4">
-        <div className="bg-white min-h-[500px]">
-          <Editor
-            ref={editorRef}
-            initialValue={content}
-            height="500px"
-            initialEditType="markdown"
-            useCommandShortcut={true}
-            hideModeSwitch={true}
-            events={{
-              change: () => {
-                if (editorRef.current) {
-                  const markdown = editorRef.current.getInstance().getMarkdown();
-                  setContent(markdown);
-                }
+      <div className="bg-white">
+        <Editor
+          height="calc(100vh - 180px)"
+          ref={editorRef}
+          initialValue={content}
+          initialEditType="markdown"
+          useCommandShortcut={true}
+          hideModeSwitch={true}
+          events={{
+            change: () => {
+              if (editorRef.current) {
+                const markdown = editorRef.current.getInstance().getMarkdown();
+                setContent(markdown);
               }
-            }}
-          />
-        </div>
+            }
+          }}
+        />
       </div>
     </div>
   );
