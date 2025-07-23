@@ -45,81 +45,80 @@ body {
   color: var(--black);
 }
 
-/* 마크다운 미리보기 스타일 */
-.markdown-preview {
+/* Toast UI 에디터 툴바 숨기기 */
+.toastui-editor-toolbar {
+  display: none !important;
+}
+
+.toastui-editor-toolbar-group {
+  display: none !important;
+}
+
+.toastui-editor-toolbar-icons {
+  display: none !important;
+}
+
+/* 마크다운 에디터 실시간 렌더링 스타일 */
+.toastui-editor-md-container .toastui-editor-md-vertical-style .toastui-editor-md-preview {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 14px;
   line-height: 1.6;
 }
 
-.markdown-preview h1 {
-  font-size: 2rem;
+/* 제목 스타일 */
+.toastui-editor-md-container .toastui-editor-md-vertical-style .toastui-editor-md-preview h1 {
+  font-size: 2em;
   font-weight: bold;
-  margin-bottom: 1rem;
-  margin-top: 1.5rem;
-  color: var(--black);
+  margin: 1em 0 0.5em 0;
+  color: #333;
 }
 
-.markdown-preview h2 {
-  font-size: 1.5rem;
+.toastui-editor-md-container .toastui-editor-md-vertical-style .toastui-editor-md-preview h2 {
+  font-size: 1.5em;
   font-weight: bold;
-  margin-bottom: 0.75rem;
-  margin-top: 1.25rem;
-  color: var(--black);
+  margin: 1em 0 0.5em 0;
+  color: #333;
 }
 
-.markdown-preview h3 {
-  font-size: 1.25rem;
+.toastui-editor-md-container .toastui-editor-md-vertical-style .toastui-editor-md-preview h3 {
+  font-size: 1.25em;
   font-weight: bold;
-  margin-bottom: 0.5rem;
-  margin-top: 1rem;
-  color: var(--black);
+  margin: 1em 0 0.5em 0;
+  color: #333;
 }
 
-.markdown-preview p {
-  margin-bottom: 1rem;
-  color: var(--black);
-}
-
-.markdown-preview strong {
+/* 굵은 글씨 */
+.toastui-editor-md-container .toastui-editor-md-vertical-style .toastui-editor-md-preview strong {
   font-weight: bold;
 }
 
-.markdown-preview em {
+/* 기울임 글씨 */
+.toastui-editor-md-container .toastui-editor-md-vertical-style .toastui-editor-md-preview em {
   font-style: italic;
 }
 
-.markdown-preview ul {
-  list-style-type: disc;
-  margin-left: 1.5rem;
-  margin-bottom: 1rem;
+/* 목록 */
+.toastui-editor-md-container .toastui-editor-md-vertical-style .toastui-editor-md-preview ul,
+.toastui-editor-md-container .toastui-editor-md-vertical-style .toastui-editor-md-preview ol {
+  margin: 0.5em 0;
+  padding-left: 2em;
 }
 
-.markdown-preview ol {
-  list-style-type: decimal;
-  margin-left: 1.5rem;
-  margin-bottom: 1rem;
-}
-
-.markdown-preview li {
-  margin-bottom: 0.25rem;
-}
-
-.markdown-preview code {
-  background-color: #f3f4f6;
-  padding: 0.125rem 0.25rem;
-  border-radius: 0.25rem;
-  font-family: 'Courier New', monospace;
-  font-size: 0.875rem;
-}
-
-.markdown-preview pre {
-  background-color: #f3f4f6;
-  padding: 1rem;
-  border-radius: 0.5rem;
+/* 코드 블록 */
+.toastui-editor-md-container .toastui-editor-md-vertical-style .toastui-editor-md-preview pre {
+  background-color: #f6f8fa;
+  border: 1px solid #e1e4e8;
+  border-radius: 6px;
+  padding: 16px;
   overflow-x: auto;
-  margin-bottom: 1rem;
+  margin: 1em 0;
 }
 
-.markdown-preview pre code {
-  background-color: transparent;
-  padding: 0;
+.toastui-editor-md-container .toastui-editor-md-vertical-style .toastui-editor-md-preview code {
+  background-color: #f6f8fa;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.9em;
 }
+

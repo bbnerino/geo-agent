@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import React, { useState, useRef, useEffect } from 'react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+import React, { useState, useRef, useEffect } from "react";
+import { Editor } from "@toast-ui/react-editor";
+import "@toast-ui/editor/dist/toastui-editor.css";
 
 const WritingStudio = () => {
   const [content, setContent] = useState(`# 제목 1
@@ -24,46 +24,19 @@ const WritingStudio = () => {
 console.log('Hello World');
 \`\`\``);
 
-  const [isEditing, setIsEditing] = useState(false);
-  const [editContent, setEditContent] = useState(content);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const editorRef = useRef<Editor>(null);
 
   useEffect(() => {
-    if (isEditing && textareaRef.current) {
-      textareaRef.current.focus();
-      textareaRef.current.setSelectionRange(
-        textareaRef.current.value.length,
-        textareaRef.current.value.length
-      );
+    if (editorRef.current) {
+      const editorInstance = editorRef.current.getInstance();
+      
+      // 에디터의 change 이벤트 리스너 추가
+      editorInstance.on('change', () => {
+        const markdown = editorInstance.getMarkdown();
+        setContent(markdown);
+      });
     }
-  }, [isEditing]);
-
-  const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setEditContent(e.target.value);
-  };
-
-  const handleEditClick = () => {
-    setIsEditing(true);
-    setEditContent(content);
-  };
-
-  const handleSave = () => {
-    setContent(editContent);
-    setIsEditing(false);
-  };
-
-  const handleCancel = () => {
-    setIsEditing(false);
-    setEditContent(content);
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Escape') {
-      handleCancel();
-    } else if (e.key === 'Enter' && e.metaKey) {
-      handleSave();
-    }
-  };
+  }, []);
 
   return (
     <div className="content-container content-container-main lg:flex-[2]">
@@ -71,75 +44,23 @@ console.log('Hello World');
         <h1>Writing Studio</h1>
       </div>
       <div className="p-4">
-        {/* 간단한 툴바 */}
-        <div className="border-b border-gray-200 pb-4 mb-4 flex flex-wrap gap-2">
-          <button className="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 rounded">
-            굵게
-          </button>
-          <button className="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 rounded">
-            기울임
-          </button>
-          <button className="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 rounded">
-            H1
-          </button>
-          <button className="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 rounded">
-            H2
-          </button>
-          <button className="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 rounded">
-            목록
-          </button>
-        </div>
-
-        {/* 노션 스타일 에디터 */}
-        <div className="border rounded-lg bg-white min-h-[500px]">
-          {isEditing ? (
-            <div className="p-4">
-              <div className="flex justify-between items-center mb-4">
-                <span className="text-sm font-medium text-gray-600">편집 모드</span>
-                <div className="flex gap-2">
-                  <button
-                    onClick={handleSave}
-                    className="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600"
-                  >
-                    저장 (⌘+Enter)
-                  </button>
-                  <button
-                    onClick={handleCancel}
-                    className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
-                  >
-                    취소 (Esc)
-                  </button>
-                </div>
-              </div>
-              <textarea
-                ref={textareaRef}
-                value={editContent}
-                onChange={handleContentChange}
-                onKeyDown={handleKeyDown}
-                className="w-full h-96 p-4 resize-none focus:outline-none font-mono text-sm border rounded"
-                placeholder="여기에 마크다운을 작성하세요..."
-              />
-            </div>
-          ) : (
-            <div 
-              className="p-4 cursor-text"
-              onClick={handleEditClick}
-            >
-              <div className="markdown-preview">
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                  {content}
-                </ReactMarkdown>
-              </div>
-              <div className="mt-4 text-center">
-                <button
-                  onClick={handleEditClick}
-                  className="px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
-                >
-                  편집하기
-                </button>
-              </div>
-            </div>
-          )}
+        <div className="bg-white min-h-[500px]">
+          <Editor
+            ref={editorRef}
+            initialValue={content}
+            height="500px"
+            initialEditType="markdown"
+            useCommandShortcut={true}
+            hideModeSwitch={true}
+            events={{
+              change: () => {
+                if (editorRef.current) {
+                  const markdown = editorRef.current.getInstance().getMarkdown();
+                  setContent(markdown);
+                }
+              }
+            }}
+          />
         </div>
       </div>
     </div>
