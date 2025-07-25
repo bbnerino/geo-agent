@@ -1,8 +1,9 @@
 import { VectorCollection } from "@/types/vectorCollection";
-import { uploadVectorStoreFile } from "@/utils/vectorStore";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchVectorCollections } from "@/api/vector";
+import FileUploadModal from "./FileUploadModal";
+import { useFileStore } from "@/store/useFileStore";
 
 const KnowledgeHub = () => {
   // useQuery 사용
@@ -51,7 +52,7 @@ const KnowledgeHub = () => {
         <div className="my-4 space-y-2">
           {vectorCollections.map((collection: VectorCollection) => (
             <div key={collection.name} className="p-3 bg-blue-50 rounded-lg">
-              <h3 className="font-medium text-[var(--black)]">{collection.name}</h3>
+              <h3 className="font-medium text-[var(--black)]">{collection.fileAlias || collection.name}</h3>
             </div>
           ))}
         </div>
@@ -62,53 +63,36 @@ const KnowledgeHub = () => {
 };
 
 const AddSourceButton = ({ refetch }: { refetch: () => void }) => {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [fileName, setFileName] = useState<string>("");
-  const [isUploading, setIsUploading] = useState(false);
+  const { selectedFile, setSelectedFile, createFile } = useFileStore();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       setSelectedFile(e.target.files[0]);
-      setFileName(e.target.files[0].name);
+      createFile(e.target.files[0].name);
+      console.log(e.target.files[0]);
     }
   };
 
-  const fileUpload = async () => {
-    if (selectedFile) {
-      setIsUploading(true);
-      try {
-        const response = await uploadVectorStoreFile({ name: fileName, file: selectedFile });
-        setFileName("");
-        setSelectedFile(null);
-        console.log(response);
-        const { name, count } = response;
-        refetch();
-      } catch (error) {
-        console.error("Failed to upload vector collection:", error);
-      } finally {
-        setIsUploading(false);
-        setFileName("");
-      }
-    }
-  };
   const onClickButton = () => {
     const input = document.getElementById("file-input") as HTMLInputElement;
     input?.click();
   };
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   useEffect(() => {
-    if (selectedFile) {
-      fileUpload();
-    }
+    if (selectedFile) setIsModalOpen(true);
   }, [selectedFile]);
 
   return (
     <>
       <div onClick={onClickButton} className="p-3 bg-blue-100 rounded-lg text-center cursor-pointer">
         <h3 className="font-bold text-[var(--black)] text-2xl">+</h3>
-        {fileName && <p className="text-sm text-black mt-1">{fileName}</p>}
       </div>
+      {selectedFile && <p>{selectedFile.name}</p>}
       <input id="file-input" type="file" accept=".md" onChange={handleFileChange} readOnly className="hidden" />
+
+      <FileUploadModal open={isModalOpen} onClose={() => setIsModalOpen(false)} refetch={refetch} />
     </>
   );
 };

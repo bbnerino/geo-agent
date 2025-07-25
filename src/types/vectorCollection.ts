@@ -1,9 +1,10 @@
 export class VectorCollection {
   name: string;
-  count?: number;
 
-  constructor(name: string, count?: number) {
+  fileAlias?: string;
+  description?: string;
+
+  constructor(name: string) {
     this.name = name;
-    this.count = count;
   }
 }
