@@ -5,7 +5,7 @@ interface CreateFileRequest {
   fileDesc?: string;
 }
 
-export const createFile = async (data: CreateFileRequest) => {
+export const uploadFile = async (data: CreateFileRequest) => {
   const response = await fetch("/api/files", {
     method: "POST",
     headers: {
@@ -21,3 +21,4 @@ export const createFile = async (data: CreateFileRequest) => {
 
   return response.json();
 };
+

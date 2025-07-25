@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { Editor } from "@toast-ui/react-editor";
+// import { Editor } from "@toast-ui/react-editor";
 import "@toast-ui/editor/dist/toastui-editor.css";
 
 const WritingStudio = () => {
+  return <></>;
   const [content, setContent] = useState("");
 
   const editorRef = useRef<Editor>(null);

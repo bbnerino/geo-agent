@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchVectorCollections } from "@/api/vector";
 import FileUploadModal from "./FileUploadModal";
 import { useFileStore } from "@/store/useFileStore";
+import FileDetailModal from "./FileDetailModal";
 
 const KnowledgeHub = () => {
   // useQuery 사용
@@ -16,6 +17,9 @@ const KnowledgeHub = () => {
     queryKey: ["vectorCollections"],
     queryFn: fetchVectorCollections
   });
+
+  const [isFileDetailModalOpen, setIsFileDetailModalOpen] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<VectorCollection | null>(null);
 
   if (isLoading) {
     return (
@@ -51,23 +55,31 @@ const KnowledgeHub = () => {
       <div className="p-4">
         <div className="my-4 space-y-2">
           {vectorCollections.map((collection: VectorCollection) => (
-            <div key={collection.name} className="p-3 bg-blue-50 rounded-lg">
+            <div
+              onClick={() => {
+                setSelectedFile(collection);
+                setIsFileDetailModalOpen(true);
+              }}
+              key={collection.name}
+              className="p-3 bg-blue-50 rounded-lg"
+            >
               <h3 className="font-medium text-[var(--black)]">{collection.fileAlias || collection.name}</h3>
             </div>
           ))}
         </div>
         <AddSourceButton refetch={refetch} />
       </div>
+      <FileDetailModal open={isFileDetailModalOpen} onClose={() => setIsFileDetailModalOpen(false)} file={selectedFile} />
     </div>
   );
 };
 
 const AddSourceButton = ({ refetch }: { refetch: () => void }) => {
-  const { selectedFile, setSelectedFile, createFile } = useFileStore();
+  const { file, setFile, createFile } = useFileStore();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      setSelectedFile(e.target.files[0]);
+      setFile(e.target.files[0]);
       createFile(e.target.files[0].name);
       console.log(e.target.files[0]);
     }
@@ -81,15 +93,15 @@ const AddSourceButton = ({ refetch }: { refetch: () => void }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    if (selectedFile) setIsModalOpen(true);
-  }, [selectedFile]);
+    if (file) setIsModalOpen(true);
+  }, [file]);
 
   return (
     <>
       <div onClick={onClickButton} className="p-3 bg-blue-100 rounded-lg text-center cursor-pointer">
         <h3 className="font-bold text-[var(--black)] text-2xl">+</h3>
       </div>
-      {selectedFile && <p>{selectedFile.name}</p>}
+      {file && <p>{file.name}</p>}
       <input id="file-input" type="file" accept=".md" onChange={handleFileChange} readOnly className="hidden" />
 
       <FileUploadModal open={isModalOpen} onClose={() => setIsModalOpen(false)} refetch={refetch} />

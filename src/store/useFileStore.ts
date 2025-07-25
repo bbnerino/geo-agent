@@ -7,9 +7,9 @@ interface FileState {
   fileDesc: string;
 
   // file upload
-  selectedFile: File | null;
-  setSelectedFile: (file: File) => void;
-  clearSelectedFile: () => void;
+  file: File | null;
+  setFile: (file: File) => void;
+  clearFile: () => void;
 
   setDescription: (description: string) => void;
   createFile: (fileName: string) => void;
@@ -24,7 +24,7 @@ export const useFileStore = create<FileState>((set) => ({
   name: "",
   fileAlias: "",
   fileDesc: "",
-  selectedFile: null,
+  file: null,
   isUploading: false,
 
   createFile: (fileAlias: string) => {
@@ -32,8 +32,8 @@ export const useFileStore = create<FileState>((set) => ({
   },
   setDescription: (description: string) => set({ fileDesc: description }),
 
-  clearSelectedFile: () => set({ selectedFile: null }),
-  setSelectedFile: (file: File) => set({ selectedFile: file }),
+  clearFile: () => set({ file: null }),
+  setFile: (file: File) => set({ file }),
 
   setIsUploading: (isUploading: boolean) => set({ isUploading })
 }));

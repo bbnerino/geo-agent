@@ -6,15 +6,21 @@ interface ModalProps {
   onClose: () => void;
   onConfirm?: () => void;
   children?: React.ReactNode;
-  width?: number;
+  size?: "small" | "medium" | "large";
 }
 
-const Modal = ({ open, onClose, onConfirm, children, width = 500 }: ModalProps) => {
+const Modal = ({ open, onClose, onConfirm, children, size = "medium" }: ModalProps) => {
+  const width = {
+    small: "300px",
+    medium: "500px",
+    large: "700px"
+  }[size];
   if (!open) return null;
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-500/50" onClick={onClose}>
       <div
-        className={`bg-white rounded-lg shadow-lg w-[${width}px] min-h-[300px] flex flex-col p-6 relative pb-15`}
+        style={{ width: width }}
+        className={`bg-white rounded-lg shadow-lg min-h-[300px] flex flex-col p-6 relative pb-15`}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex-1 overflow-auto">{children}</div>

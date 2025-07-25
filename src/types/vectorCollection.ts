@@ -1,8 +1,7 @@
 export class VectorCollection {
   name: string;
-
   fileAlias?: string;
-  description?: string;
+  fileDesc?: string;
 
   constructor(name: string) {
     this.name = name;
