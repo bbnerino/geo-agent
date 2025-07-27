@@ -54,6 +54,12 @@ export default function ChattingInput({
         value={inputValue}
         onChange={onChange}
         placeholder="입력을 시작하세요..."
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            onSubmit?.();
+          }
+        }}
       />
       {onSubmit && (
         <div

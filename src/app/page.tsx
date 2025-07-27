@@ -4,7 +4,7 @@ import Header from "@/components/Header";
 import IdeaLab from "@/components/IdeaLab/IdeaLab";
 import KnowledgeHub from "@/components/KnowledgeHub/KnowledgeHub";
 import TabButtons from "@/components/TabButton";
-import WritingStudio from "@/components/WritingStudio";
+import WritingStudio from "@/components/WritingStudio/WritingStudio";
 import { ActionType } from "@/types/actionType";
 import { useState } from "react";
 

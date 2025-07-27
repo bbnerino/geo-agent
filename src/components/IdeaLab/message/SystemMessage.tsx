@@ -1,3 +1,5 @@
+import ApplyContent from "./ApplyContent";
+
 const SystemMessage = ({
   role = "assistant",
   message = "",
@@ -24,6 +26,7 @@ const SystemMessage = ({
   );
 
   const mapAuthor = {
+    marketer_agent: "기획자",
     data_analyst_agent: "데이터 분석가",
     content_reviewer_agent: "콘텐츠 감수관",
     persona_builder_agent: "고객 분석가",
@@ -41,9 +44,9 @@ const SystemMessage = ({
         className={`flex flex-col border border-transparent p-2 gap-2 cursor-pointer hover:box-shadow-md max-w-xl break-words rounded-md bg-gray-100 pr-10`}
       >
         <div className={`text-sm text-gray-500 font-bold`}>
-          {mapRole[role]}{" "}
+          {mapRole[role]}
           {author && (
-            <span className="text-blue-400 text-xs font-normal bg-blue-100 rounded-lg px-2 py-1 ml-2">
+            <span className="text-blue-400 text-xs font-normal bg-blue-100 rounded-lg px-2 py-1 ml-2 font-semibold">
               {mapAuthor[author] || author}
             </span>
           )}
@@ -52,6 +55,7 @@ const SystemMessage = ({
           className="text-sm break-words whitespace-pre-line"
           dangerouslySetInnerHTML={{ __html: processedMessage }}
         />
+        {author === "content_writer_agent" && <ApplyContent content={message} />}
       </div>
     </div>
   );
