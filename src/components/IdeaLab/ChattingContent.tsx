@@ -1,5 +1,8 @@
 import { Message } from "@/types/chatting";
 import React, { useEffect, useRef } from "react";
+import LoadingMessage from "./message/LoadingMessage";
+import UserMessage from "./message/UserMessage";
+import SystemMessage from "./message/SystemMessage";
 
 const ChattingContent = ({ messages, isLoading }: { messages: Message[]; isLoading: boolean }) => {
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -13,81 +16,14 @@ const ChattingContent = ({ messages, isLoading }: { messages: Message[]; isLoadi
     <div className="chat-scroll w-full h-[calc(100vh-300px)] overflow-y-auto">
       <div className="flex flex-col gap-2 items-start" id="chatting-area">
         {messages.map((message, index) => {
-          return (
-            <div key={index} className="w-full">
-              <ChattingMessage role={message.role} message={message.content} />
-            </div>
-          );
+          if (message.role === "user") {
+            return <UserMessage message={message.content} key={index} />;
+          }
+          return <SystemMessage key={index} role={message.role} message={message.content} author={message.author} />;
         })}
         {isLoading && <LoadingMessage />}
         <div ref={bottomRef} />
       </div>
-    </div>
-  );
-};
-
-const ChattingMessage = ({
-  role = "user",
-  message = ""
-}: {
-  role?: "user" | "assistant" | "system";
-  message?: string;
-}) => {
-  const mapRole = {
-    user: "User",
-    assistant: "Assistant",
-    system: "System",
-    function_call: "Function Call",
-    function_call_output: "Function Call Output"
-  };
-
-  //    ``` ``` 영역 background 컬러 변경
-  let processedMessage = message?.replace(/\n/g, "<br />");
-
-  processedMessage = processedMessage?.replace(
-    /```(.*?)```/g,
-    `<div class="bg-gray-100 p-2 rounded-md"><p class="text-sm text-gray-500">Code</p>$1</div>`
-  );
-
-  processedMessage = processedMessage?.replace(/\*\*(.*?)\*\*/g, "<b>$1</b>");
-  if (role === "system") return null;
-  return (
-    <div
-      className={`flex flex-col border border-transparent p-2 gap-2 cursor-pointer hover:box-shadow-md max-w-xl break-words rounded-md ${role === "assistant" ? "bg-gray-100" : "bg-blue-50"}`}
-    >
-      <div className={`text-sm ${role === "assistant" ? "text-gray-500" : "text-blue-500"} font-bold`}>
-        {mapRole[role]}
-      </div>
-      <div className="text-sm break-words whitespace-pre-line" dangerouslySetInnerHTML={{ __html: processedMessage }} />
-    </div>
-  );
-};
-
-const LoadingMessage = () => {
-  return (
-    <div
-      className="w-full h-10 rounded-md bg-gray-100 relative overflow-hidden"
-      style={{
-        position: "relative",
-        overflow: "hidden"
-      }}
-    >
-      <div
-        className="absolute top-0 left-0 h-full w-full"
-        style={{
-          background: "linear-gradient(90deg, transparent, rgba(200,200,200,0.2), transparent)",
-          animation: "shimmer 1.5s infinite",
-          transform: "translateX(-100%)"
-        }}
-      />
-      <style>
-        {`
-        @keyframes shimmer {
-          0% { transform: translateX(-100%); }
-          100% { transform: translateX(100%); }
-        }
-      `}
-      </style>
     </div>
   );
 };
