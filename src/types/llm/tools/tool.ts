@@ -1,9 +1,11 @@
+import { airconFunctionData, handleAircon } from "./aircon";
+
 export interface Tool {
   type: string;
   function: {
     name: string;
     description: string;
-    parameters: any;
+    parameters: unknown;
   };
 }
 
@@ -34,3 +36,11 @@ export interface ToolFunctionData {
     };
   };
 }
+
+export const toolExecute = {
+  handleAircon
+} as {
+  [key: string]: (...args: unknown[]) => Promise<unknown>;
+};
+
+export const tools = ["handleAircon"];

@@ -1,4 +1,4 @@
-import { PromptRequest } from "@/utils/gpt/request";
+import { PromptRequest } from "@/utils/llm/request";
 import { GET_FILE_DESCRIPTION_PROMPT } from "./prompt";
 
 export const getFileDescription = async (file: File) => {

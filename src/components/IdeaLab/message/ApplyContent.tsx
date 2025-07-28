@@ -6,10 +6,10 @@ const ApplyContent = ({ content }: { content: string }) => {
   return (
     <div className="w-full flex justify-end">
       <div
-        className="py-1 px-4 bg-blue-100 rounded-md text-blue-500 font-semibold cursor-pointer hover:bg-blue-200"
+        className="py-1 px-4 bg-purple-100 rounded-md text-purple-500 font-semibold cursor-pointer hover:bg-purple-200"
         onClick={() => applyContent(content)}
       >
-        적용
+        적용하기
       </div>
     </div>
   );

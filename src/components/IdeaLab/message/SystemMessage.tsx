@@ -1,4 +1,5 @@
 import ApplyContent from "./ApplyContent";
+import ContentWriter from "./ContentWriter";
 
 const SystemMessage = ({
   role = "assistant",
@@ -38,6 +39,9 @@ const SystemMessage = ({
 
   processedMessage = processedMessage?.replace(/\*\*(.*?)\*\*/g, "<b>$1</b>");
   if (role === "system") return null;
+  if (author === "content_writer_agent") {
+    return <ContentWriter message={message} />;
+  }
   return (
     <div className="w-full flex justify-start">
       <div
@@ -55,7 +59,6 @@ const SystemMessage = ({
           className="text-sm break-words whitespace-pre-line"
           dangerouslySetInnerHTML={{ __html: processedMessage }}
         />
-        {author === "content_writer_agent" && <ApplyContent content={message} />}
       </div>
     </div>
   );

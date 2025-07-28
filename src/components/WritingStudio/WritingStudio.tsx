@@ -1,12 +1,40 @@
 "use client";
 import { useWritingStudioStore } from "@/store/writingStudio";
-import React, { useState } from "react";
-import PopupIdeaLab from "./PopupIdeaLab";
+import React, { useState, useCallback } from "react";
+import { debounce } from "lodash";
 
 const WritingStudio = () => {
   const { content, setContent } = useWritingStudioStore();
+  const [showEditButton, setShowEditButton] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const [buttonPosition, setButtonPosition] = useState({ x: 0, y: 0 });
+  const [selectedText, setSelectedText] = useState("");
 
-  const [isOpen, setIsOpen] = useState(false);
+  const debouncedSetButton = useCallback(
+    debounce((selection: string, x: number, y: number) => {
+      setSelectedText(selection);
+      setButtonPosition({ x, y: y - 30 });
+      setShowEditButton(true);
+    }, 300),
+    []
+  );
+
+  const handleTextSelection = (e: React.MouseEvent<HTMLTextAreaElement>) => {
+    const textarea = e.currentTarget;
+    const selection = textarea.value.substring(textarea.selectionStart, textarea.selectionEnd);
+
+    if (!selection) {
+      setShowEditButton(false);
+      return;
+    }
+
+    debouncedSetButton(selection, e.clientX, e.clientY);
+  };
+
+  const handleEditClick = () => {
+    setShowPopup(true);
+    setShowEditButton(false);
+  };
 
   return (
     <div className="content-container content-container-main h-full">
@@ -18,6 +46,36 @@ const WritingStudio = () => {
           background-color: #e3e9ff49;
           border-radius: 10px;
         }
+        .edit-button {
+          position: fixed;
+          transform: translateX(-50%);
+          background-color: #4a5568;
+          color: white;
+          padding: 4px 8px;
+          border-radius: 4px;
+          cursor: pointer;
+          z-index: 50;
+        }
+        .popup {
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background-color: white;
+          padding: 20px;
+          border-radius: 8px;
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+          z-index: 100;
+        }
+        .overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: rgba(0, 0, 0, 0.5);
+          z-index: 90;
+        }
       `}</style>
       <div className="content-container-header h-[60px]">
         <h1>Writing Studio</h1>
@@ -28,11 +86,35 @@ const WritingStudio = () => {
           className="writing-studio-textarea w-full h-[calc(100vh-180px)] resize-none"
           value={content}
           onChange={(e) => setContent(e.target.value)}
+          onMouseUp={handleTextSelection}
           placeholder="# 제목을 입력하세요"
         />
       </div>
 
-      <PopupIdeaLab open={isOpen} onClose={() => setIsOpen(false)} />
+      {showEditButton && (
+        <button
+          className="edit-button"
+          style={{ top: `${buttonPosition.y}px`, left: `${buttonPosition.x}px` }}
+          onClick={handleEditClick}
+        >
+          편집
+        </button>
+      )}
+
+      {showPopup && (
+        <>
+          <div className="overlay" onClick={() => setShowPopup(false)} />
+          <div className="popup">
+            <h3 className="text-lg font-bold mb-4">텍스트 편집</h3>
+            <p className="mb-4">선택된 텍스트: {selectedText}</p>
+            <div className="flex justify-end">
+              <button className="bg-gray-200 px-4 py-2 rounded" onClick={() => setShowPopup(false)}>
+                닫기
+              </button>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

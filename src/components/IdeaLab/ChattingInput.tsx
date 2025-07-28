@@ -10,12 +10,21 @@ export default function ChattingInput({
   onSubmit?: () => void;
 }) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const isSubmitting = useRef(false);
+
+  const handleSubmit = () => {
+    if (!onSubmit || isSubmitting.current || !inputValue.trim()) return;
+
+    isSubmitting.current = true;
+    onSubmit();
+    setTimeout(() => {
+      isSubmitting.current = false;
+    }, 100);
+  };
 
   useEffect(() => {
     if (textareaRef.current) {
-      // 높이를 초기화
       textareaRef.current.style.height = "auto";
-      // 스크롤 높이로 설정
       textareaRef.current.style.height = textareaRef.current.scrollHeight + "px";
     }
   }, [inputValue]);
@@ -29,7 +38,7 @@ export default function ChattingInput({
           padding-right: 30px;
           min-height: 60px;
           max-height: 200px;
-          border: 1px solid #8F9298;
+          border: 1px solid #8f9298;
           border-radius: 8px;
           resize: none;
           overflow-y: auto;
@@ -57,14 +66,18 @@ export default function ChattingInput({
         onKeyDown={(e) => {
           if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
-            onSubmit?.();
+          }
+        }}
+        onKeyUp={(e) => {
+          if (e.key === "Enter" && !e.shiftKey) {
+            handleSubmit();
           }
         }}
       />
       {onSubmit && (
         <div
-          className="absolute bottom-9 right-4 flex items-center rounded-full bg-green-300 w-8 h-8 justify-center hover:bg-green-400 cursor-pointer"
-          onClick={onSubmit}
+          className="absolute bottom-9 right-4 flex items-center rounded-full bg-purple-400 w-8 h-8 justify-center hover:bg-purple-500 cursor-pointer text-white"
+          onClick={handleSubmit}
         >
           ⬆
         </div>

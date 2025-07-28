@@ -7,7 +7,9 @@ import { useFileStore } from "@/store/useFileStore";
 import FileDetailModal from "./FileDetailModal";
 
 const KnowledgeHub = () => {
-  // useQuery 사용
+  // 🟢 제거
+  const [isShow, setIsShow] = useState(false);
+
   const {
     data: vectorCollections = [],
     isLoading,
@@ -15,7 +17,8 @@ const KnowledgeHub = () => {
     refetch
   } = useQuery({
     queryKey: ["vectorCollections"],
-    queryFn: fetchVectorCollections
+    queryFn: fetchVectorCollections,
+    enabled: isShow
   });
 
   const [isFileDetailModalOpen, setIsFileDetailModalOpen] = useState(false);
@@ -49,8 +52,10 @@ const KnowledgeHub = () => {
 
   return (
     <div className="content-container content-container-left h-full">
-      <div className="content-container-header">
+      <div className="content-container-header flex">
         <h1>Knowledge Hub</h1>
+        {/* 🟢 제거 */}
+        <input className="ml-4" type="checkbox" checked={isShow} onChange={() => setIsShow(!isShow)} />
       </div>
       <div className="p-4">
         <div className="my-4 space-y-2">
