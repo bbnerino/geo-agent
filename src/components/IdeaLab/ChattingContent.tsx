@@ -3,6 +3,7 @@ import React, { useEffect, useRef } from "react";
 import LoadingMessage from "./message/LoadingMessage";
 import UserMessage from "./message/UserMessage";
 import SystemMessage from "./message/SystemMessage";
+import ToolMessage from "./message/ToolMessage";
 
 const ChattingContent = ({ messages, isLoading }: { messages: Message[]; isLoading: boolean }) => {
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -18,6 +19,9 @@ const ChattingContent = ({ messages, isLoading }: { messages: Message[]; isLoadi
         {messages.map((message, index) => {
           if (message.role === "user") {
             return <UserMessage message={message.content} key={index} />;
+          }
+          if (message.role === "tool") {
+            return <ToolMessage key={index} message={message.content} author={message.author} />;
           }
           return <SystemMessage key={index} role={message.role} message={message.content} author={message.author} />;
         })}

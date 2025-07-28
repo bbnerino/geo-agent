@@ -15,7 +15,7 @@ export default function IdeaLab() {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const { messages, pushUserMessage, pushAssistantMessage } = useMessageStore();
+  const { messages, pushUserMessage, pushAssistantMessage, pushToolMessage } = useMessageStore();
 
   const handleSubmit = async () => {
     setIsLoading(true);
@@ -33,13 +33,27 @@ export default function IdeaLab() {
       const content = message.content?.parts?.[0];
       if (!content) return;
       if (content.role === "user") {
-        if (content?.function_response) {
-          pushUserMessage(content.function_response.name ?? "-", message.author);
+        if (content?.functionResponse) {
+          pushUserMessage(content.functionResponse.name ?? "-", message.author);
         }
       } else {
-        if (content?.function_call) {
-          pushAssistantMessage(content.function_call.name ?? "-", message.author);
+        console.log("🔵", content);
+        if (content?.functionCall) {
+          pushToolMessage(
+            content.functionCall.name ? `함수 호출 : ${content.functionCall.name}` : "-",
+            message.author
+          );
+          return;
+        }
+        if (content?.functionResponse) {
+          if (content.functionResponse.name === "update_content") {
+            const newContent = content?.functionResponse.response.content;
+
+            pushToolMessage(newContent, "update_content");
+          }
+          return;
         } else {
+          // ???
           pushAssistantMessage(content.text ?? "-", message.author);
         }
       }

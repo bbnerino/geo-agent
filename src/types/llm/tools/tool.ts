@@ -1,4 +1,4 @@
-import { airconFunctionData, handleAircon } from "./aircon";
+import { airconFunctionData, handleAircon } from "./aircone";
 
 export interface Tool {
   type: string;

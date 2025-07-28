@@ -1,23 +1,7 @@
+import { AUTHOR_MAP } from "@/utils/agents";
 import UpdateContent from "./tools/UpdateContent";
 
-const SystemMessage = ({
-  role = "assistant",
-  message = "",
-  author = ""
-}: {
-  role?: "user" | "assistant" | "system" | "tool";
-  message?: string;
-  author?: string;
-}) => {
-  const mapRole = {
-    user: "User",
-    assistant: "Assistant",
-    system: "System",
-    tool: "Tool",
-    function_call: "Function Call",
-    function_call_output: "Function Call Output"
-  };
-
+const ToolMessage = ({ message = "", author = "" }: { message?: string; author?: string }) => {
   //    ``` ``` 영역 background 컬러 변경
   let processedMessage = message?.replace(/\n/g, "<br />");
 
@@ -26,23 +10,9 @@ const SystemMessage = ({
     `<div class="bg-gray-100 p-2 rounded-md"><p class="text-sm text-gray-500">Code</p>$1</div>`
   );
 
-  const mapAuthor = {
-    marketer_agent: "기획자",
-    data_analyst_agent: "데이터 분석가",
-    content_reviewer_agent: "콘텐츠 감수관",
-    persona_builder_agent: "고객 분석가",
-    content_writer_agent: "콘텐츠 작성자",
-    seo_optimizer_agent: "검색엔진 전략가",
-    trend_researcher_agent: "트렌드 연구원",
-    strategy_planner_agent: "전략 기획자"
-  };
-
   processedMessage = processedMessage?.replace(/\*\*(.*?)\*\*/g, "<b>$1</b>");
-  if (role === "system") return null;
-  if (role === "tool") {
-    if (author === "update_content") {
-      return <UpdateContent message={message} />;
-    }
+  if (author === "update_content") {
+    return <UpdateContent message={message} />;
   }
   return (
     <div className="w-full flex justify-start">
@@ -50,10 +20,10 @@ const SystemMessage = ({
         className={`flex flex-col border border-transparent p-2 gap-2 cursor-pointer hover:box-shadow-md max-w-xl break-words rounded-md bg-gray-100 pr-10`}
       >
         <div className={`text-sm text-gray-500 font-bold`}>
-          {mapRole[role]}
+          Tool
           {author && (
             <span className="text-blue-400 text-xs font-normal bg-blue-100 rounded-lg px-2 py-1 ml-2 font-semibold">
-              {mapAuthor[author] || author}
+              {AUTHOR_MAP[author] || author}
             </span>
           )}
         </div>
@@ -66,4 +36,4 @@ const SystemMessage = ({
   );
 };
 
-export default SystemMessage;
+export default ToolMessage;

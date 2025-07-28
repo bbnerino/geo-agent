@@ -17,16 +17,19 @@ interface MessageResponse {
 }
 
 interface Part {
-  function_call?: {
+  functionCall?: {
     id: string;
     args: Record<string, unknown>;
     name: string;
   };
-  function_response?: {
+  functionResponse?: {
     id: string;
     name: string;
     response: {
       result: Record<string, unknown>;
+      name: string;
+      action: string;
+      content: string;
     };
   };
   text?: string;
