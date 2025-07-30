@@ -5,7 +5,15 @@ import UserMessage from "./message/UserMessage";
 import SystemMessage from "./message/SystemMessage";
 import ToolMessage from "./message/ToolMessage";
 
-const ChattingContent = ({ messages, isLoading }: { messages: Message[]; isLoading: boolean }) => {
+const ChattingContent = ({
+  messages,
+  isLoading,
+  size = "lg"
+}: {
+  messages: Message[];
+  isLoading: boolean;
+  size?: "lg" | "sm";
+}) => {
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -14,7 +22,11 @@ const ChattingContent = ({ messages, isLoading }: { messages: Message[]; isLoadi
 
   // Scroll 영역
   return (
-    <div className="chat-scroll w-full h-[calc(100vh-300px)] overflow-y-auto">
+    <div
+      className={`chat-scroll w-full overflow-y-auto ${
+        size === "sm" ? "h-[200px]" : "h-[calc(100vh-300px)]"
+      }`}
+    >
       <div className="flex flex-col gap-2 items-start" id="chatting-area">
         {messages.map((message, index) => {
           if (message.role === "user") {

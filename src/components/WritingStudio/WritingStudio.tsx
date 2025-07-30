@@ -2,17 +2,17 @@
 import { useWritingStudioStore } from "@/store/writingStudio";
 import React, { useState, useCallback } from "react";
 import { debounce } from "lodash";
+import MiniIdeaLab from "./MiniIdeaLab";
 
 const WritingStudio = () => {
-  const { content, setContent } = useWritingStudioStore();
+  const { content, setContent, setSelectedSentence } = useWritingStudioStore();
   const [showEditButton, setShowEditButton] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [buttonPosition, setButtonPosition] = useState({ x: 0, y: 0 });
-  const [selectedText, setSelectedText] = useState("");
 
   const debouncedSetButton = useCallback(
     debounce((selection: string, x: number, y: number) => {
-      setSelectedText(selection);
+      setSelectedSentence(selection);
       setButtonPosition({ x, y: y - 30 });
       setShowEditButton(true);
     }, 300),
@@ -22,8 +22,7 @@ const WritingStudio = () => {
   const handleTextSelection = (e: React.MouseEvent<HTMLTextAreaElement>) => {
     const textarea = e.currentTarget;
     const selection = textarea.value.substring(textarea.selectionStart, textarea.selectionEnd);
-
-    if (!selection) {
+    if (!selection.trim() || selection.length < 5) {
       setShowEditButton(false);
       return;
     }
@@ -49,12 +48,12 @@ const WritingStudio = () => {
         .edit-button {
           position: fixed;
           transform: translateX(-50%);
-          background-color: #4a5568;
           color: white;
           padding: 4px 8px;
           border-radius: 4px;
           cursor: pointer;
           z-index: 50;
+          background-color: #ce85ffd6;
         }
         .popup {
           position: fixed;
@@ -83,7 +82,7 @@ const WritingStudio = () => {
 
       <div className="p-4">
         <textarea
-          className="writing-studio-textarea w-full h-[calc(100vh-180px)] resize-none"
+          className="writing-studio-textarea w-full h-[calc(100vh-180px)] resize-none focus:outline-purple-100 p-2"
           value={content}
           onChange={(e) => setContent(e.target.value)}
           onMouseUp={handleTextSelection}
@@ -101,20 +100,7 @@ const WritingStudio = () => {
         </button>
       )}
 
-      {showPopup && (
-        <>
-          <div className="overlay" onClick={() => setShowPopup(false)} />
-          <div className="popup">
-            <h3 className="text-lg font-bold mb-4">텍스트 편집</h3>
-            <p className="mb-4">선택된 텍스트: {selectedText}</p>
-            <div className="flex justify-end">
-              <button className="bg-gray-200 px-4 py-2 rounded" onClick={() => setShowPopup(false)}>
-                닫기
-              </button>
-            </div>
-          </div>
-        </>
-      )}
+      <MiniIdeaLab position={buttonPosition} open={showPopup} onClose={() => setShowPopup(false)} />
     </div>
   );
 };

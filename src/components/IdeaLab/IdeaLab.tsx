@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ChattingInput from "./ChattingInput";
 import ChattingContent from "./ChattingContent";
 import { PromptRequest } from "@/api/adk";
@@ -8,14 +8,19 @@ import { useMessageStore } from "@/store/messages";
 export default function IdeaLab() {
   const [inputValue, setInputValue] = useState("");
   const searchParams = useSearchParams();
-  const router = useRouter();
   const session_id = searchParams.get("session_id");
+  const router = useRouter();
   const [sessionId, setSessionId] = useState(session_id);
-  const promptRequest = new PromptRequest({ session_id: sessionId });
+  // const promptRequest = new PromptRequest({ session_id: sessionId });
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const { messages, pushUserMessage, pushAssistantMessage, pushToolMessage } = useMessageStore();
+  const { messages, pushUserMessage, pushAssistantMessage, pushToolMessage, promptRequest, setPromptRequest } =
+    useMessageStore();
+
+  useEffect(() => {
+    setPromptRequest(new PromptRequest({ session_id: sessionId }));
+  }, [sessionId]);
 
   const handleSubmit = async () => {
     setIsLoading(true);
@@ -39,10 +44,7 @@ export default function IdeaLab() {
       } else {
         console.log("🔵", content);
         if (content?.functionCall) {
-          pushToolMessage(
-            content.functionCall.name ? `함수 호출 : ${content.functionCall.name}` : "-",
-            message.author
-          );
+          pushToolMessage(content.functionCall.name ? `함수 호출 : ${content.functionCall.name}` : "-", message.author);
           return;
         }
         if (content?.functionResponse) {

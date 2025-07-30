@@ -103,8 +103,8 @@ const AddSourceButton = ({ refetch }: { refetch: () => void }) => {
 
   return (
     <>
-      <div onClick={onClickButton} className="p-3 bg-blue-100 rounded-lg text-center cursor-pointer">
-        <h3 className="font-bold text-[var(--black)] text-2xl">+</h3>
+      <div onClick={onClickButton} className="p-3 bg-purple-300 rounded-lg text-center cursor-pointer">
+        <h3 className="font-bold text-white text-2xl">+</h3>
       </div>
       {file && <p>{file.name}</p>}
       <input id="file-input" type="file" accept=".md" onChange={handleFileChange} readOnly className="hidden" />
